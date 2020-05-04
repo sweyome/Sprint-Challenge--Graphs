@@ -18,6 +18,37 @@ class Queue():
     def size(self):
         return len(self.queue)
 
+def unexplored_exits(graph, current_room):
+    return [k for k, v in graph[current_room].items() if v=='?']
+
+
+def backtrack_path(graph, player):
+    # Create an empty queue
+    q = Queue()
+ 
+    # Add a PATH TO the starting vertex_id to the queue
+    q.enqueue( [(player.current_room.id, None)] )
+    #Create an empty set
+    visited = set()
+    # While the queue is not empty
+    while q.size() > 0:
+        #Dequeue the first path
+        path = q.dequeue()
+        # grab the last vertex from the path
+        v = path[-1][0]
+        # check if it's the target
+        if '?' in graph[v].values():
+            # if so, return the path
+            return [i[1] for i in path[1:]]
+        if v not in visited:
+            visited.add(v)
+            for key, val in graph[v].items():
+                # make a copy of the path before adding
+                path_copy = path.copy()
+                # print(f"Path copy: {path_copy}")
+                path_copy.append((val, key))
+                q.enqueue(path_copy)
+
 
 
 # Load world
